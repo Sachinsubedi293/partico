@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:stroke_text/stroke_text.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -87,20 +89,288 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
+
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Image.network("https://cdn.pixabay.com/photo/2024/05/09/12/06/fruit-8750860_1280.jpg",fit: BoxFit.cover,height: MediaQuery.of(context).size.height*0.6,)
-      ],
+    return SingleChildScrollView(
+      dragStartBehavior: DragStartBehavior.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Stack(
+            alignment: Alignment.topLeft,
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: MediaQuery.of(context).size.height * 0.55,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  viewportFraction: 1.0,
+                ),
+                items: [
+                  Image.network(
+                    "https://cdn.pixabay.com/photo/2024/05/09/12/06/fruit-8750860_1280.jpg",
+                    fit: BoxFit.cover,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    width: double.infinity,
+                  ),
+                  Image.network(
+                    "https://via.placeholder.com/600x300",
+                    fit: BoxFit.cover,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    width: double.infinity,
+                  ),
+                  Image.network(
+                    "https://via.placeholder.com/600x300",
+                    fit: BoxFit.cover,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    width: double.infinity,
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StrokeText(
+                      text: "Hello,",
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20 + MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    StrokeText(
+                      text: "Everyone,",
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20 + MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                  "Sale",
+                  style: TextStyle(
+                    fontSize: 20 + MediaQuery.of(context).size.width * 0.02,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
+                ),
+                TextButton(onPressed: (){}, child: Text("View all"))
+                  ],
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Super Rocking Sale"),
+                )
+              ],
+            )
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: CarouselSlider(
+              options: CarouselOptions(
+                height: MediaQuery.of(context).size.height * 0.25,
+                autoPlay: true,
+                enlargeCenterPage: true,
+                viewportFraction: 0.9,
+              ),
+              items: [
+                SaleCard(
+                  imageUrl: 'https://via.placeholder.com/400',
+                  title: 'Big Sale 1',
+                  description: 'Save up to 50% on selected items',
+                ),
+                SaleCard(
+                  imageUrl: 'https://via.placeholder.com/400',
+                  title: 'Big Sale 2',
+                  description: 'Discounts on all products',
+                ),
+                SaleCard(
+                  imageUrl: 'https://via.placeholder.com/400',
+                  title: 'Big Sale 3',
+                  description: 'Buy one get one free',
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              "New",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        NewCard(
+                          imageUrl: 'https://via.placeholder.com/400',
+                          title: 'New Item 1',
+                          description: 'Description of new item 1',
+                        ),
+                        NewCard(
+                          imageUrl: 'https://via.placeholder.com/400',
+                          title: 'New Item 2',
+                          description: 'Description of new item 2',
+                        ),
+                        NewCard(
+                          imageUrl: 'https://via.placeholder.com/400',
+                          title: 'New Item 3',
+                          description: 'Description of new item 3',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+class SaleCard extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+  final String description;
+
+  const SaleCard({
+    Key? key,
+    required this.imageUrl,
+    required this.title,
+    required this.description,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                height: MediaQuery.of(context).size.height * 0.15,
+                width: double.infinity,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(description),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class NewCard extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+  final String description;
+
+  const NewCard({
+    Key? key,
+    required this.imageUrl,
+    required this.title,
+    required this.description,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.4, // Adjust width as needed
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                height: MediaQuery.of(context).size.height * 0.15,
+                width: double.infinity,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(description),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 class ShopPage extends StatelessWidget {
   const ShopPage({Key? key}) : super(key: key);
